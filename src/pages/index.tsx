@@ -46,8 +46,7 @@ export default function Home() {
     setFormState({
       group: '',
       name: ''
-    })
-    inputRef.current?.focus()
+    })    
   }
 
   function onChange (name: keyof FormState, value: string) {
@@ -78,7 +77,7 @@ export default function Home() {
           <hr className="my-4" />
           <ul>
           {list.map(({ name, group }, idx) => (
-            <li key={name} className="mt-2">
+            <li key={idx} className="mt-2">
               <div className="flex gap-3">
                 <span className="w-full max-w-xs">
                   {name}
@@ -95,10 +94,10 @@ export default function Home() {
           </ul>
           <form onSubmit={submit} className="flex gap-3 mt-4">
             <div className="w-full max-w-xs">
-              <Input ref={inputRef} onChange={(e) => onChange('name', e.target.value)} label="Nome da pessoa" />
+              <Input value={formState.name} onChange={(e) => onChange('name', e.target.value)} label="Nome da pessoa" />
             </div>
             <div className="w-full max-w-xs">
-              <Select onChange={(val) => onChange('group', val as string)} label="Grupo">
+              <Select value={formState.group} onChange={(val) => onChange('group', val as string)} label="Grupo">
                 {options.map(opt => (
                   <Option key={opt} value={opt}>{opt}</Option>
                 ))}
