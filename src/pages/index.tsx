@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { Container } from "../components/container";
 import { useLocalStorage } from "../hooks/use-local-storage";
+import ScrollToTop from "react-scroll-to-top";
 
 type ListItem = {
   name: string
@@ -78,7 +79,8 @@ export default function Home() {
 
   return (
     <Container>
-      <div className="flex py-6 gap-8 relative">
+      <ScrollToTop smooth color="#6f00ff" component={"^"} />
+      <div className="flex flex-col-reverse md:flex-row pt-6 pb-24 gap-8 relative">
         <main className="flex-1 border-r-2 pr-6">
           <h1 className="font-bold text-2xl">Lista</h1>
           <hr className="my-4" />
@@ -125,7 +127,7 @@ export default function Home() {
             </button>
           </form>
         </main>
-        <aside className="w-full max-w-xs sticky top-4 h-max">
+        <aside className="w-full md:max-w-xs md:sticky top-4 h-max">
           <h1 className="font-bold text-2xl">Totalizador</h1>
           <hr className="my-4" />
           <p>Número de pessoas: {list.length}</p>
