@@ -1,4 +1,3 @@
-import { Button, Input, Option, Select } from "@material-tailwind/react";
 import React from "react";
 import { Container } from "../components/container";
 import { useLocalStorage } from "../hooks/use-local-storage";
@@ -27,33 +26,25 @@ const options = [
 
 export default function Home() {
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const groupRef = React.useRef<HTMLSelectElement>(null)
   const [list, setList] = useLocalStorage<ListItem[]>('@formatura/list', [])
-  const [formState, setFormState] = React.useState<FormState>({
-    group: '',
-    name: ''
-  })
 
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (!formState.group || !formState.name) return
-
+    const name = inputRef.current?.value
+    const group = groupRef.current?.value
+    if (!group || !name) return
 
     setList([...list, {
-      name: formState.name,
-      group: formState.group
+      name,
+      group
     }])
 
-    setFormState({
-      group: '',
-      name: ''
-    })    
-  }
-
-  function onChange (name: keyof FormState, value: string) {
-    setFormState(oldState => ({
-      ...oldState,
-      [name]: value
-    }))
+    inputRef.current.value = ''
+    inputRef.current?.focus()
+    setTimeout(() => {
+      inputRef.current?.scrollIntoView()
+    }, 100);
   }
 
   function removeItem (index: number) {
@@ -85,27 +76,28 @@ export default function Home() {
                 <span className="w-full max-w-xs">
                   {group}
                 </span>
-                <Button color="red" onClick={() => removeItem(idx)} type="button">
+                <button onClick={() => removeItem(idx)} className="px-6 py-2 rounded-md bg-red-500 text-white">
                   x
-                </Button>
+                </button>
               </div>
             </li>
           ))}
           </ul>
           <form onSubmit={submit} className="flex gap-3 mt-4">
             <div className="w-full max-w-xs">
-              <Input value={formState.name} onChange={(e) => onChange('name', e.target.value)} label="Nome da pessoa" />
+              <input ref={inputRef} className="w-full px-2 py-3 border-purple-500 border-2 rounded-md" type="text" placeholder="Nome da pessoa" />
             </div>
             <div className="w-full max-w-xs">
-              <Select value={formState.group} onChange={(val) => onChange('group', val as string)} label="Grupo">
+              <select defaultValue={options[0]} ref={groupRef}  className="min-h-[52px] w-full px-2 py-3 border-purple-500 border-2 rounded-md">
+                <option hidden value=""></option>
                 {options.map(opt => (
-                  <Option key={opt} value={opt}>{opt}</Option>
+                  <option key={opt} value={opt}>{opt}</option>
                 ))}
-              </Select>
+              </select>
             </div>
-            <Button type="submit">
+            <button type="submit" className="px-6 py-2 rounded-md bg-purple-500 text-white">
               +
-            </Button>
+            </button>
           </form>
         </main>
         <aside className="w-full max-w-xs">
