@@ -34,7 +34,6 @@ export default function Home() {
 
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    console.log('adsad')
     if (!formState.group || !formState.name) return
 
 
@@ -51,6 +50,10 @@ export default function Home() {
     }))
   }
 
+  function removeItem (index: number) {
+    setList(list.filter((_, idx) => idx !== index))
+  }
+
   return (
     <Container>
       <div className="flex py-6 gap-8">
@@ -58,8 +61,8 @@ export default function Home() {
           <h1 className="font-bold text-2xl">Lista</h1>
           <hr className="my-4" />
           <ul>
-          {list.map(({ name, group }) => (
-            <li key={name}>
+          {list.map(({ name, group }, idx) => (
+            <li key={name} className="mt-2">
               <div className="flex gap-3">
                 <span className="w-full max-w-xs">
                   {name}
@@ -67,6 +70,9 @@ export default function Home() {
                 <span className="w-full max-w-xs">
                   {group}
                 </span>
+                <Button color="red" onClick={() => removeItem(idx)} type="button">
+                  x
+                </Button>
               </div>
             </li>
           ))}
