@@ -60,6 +60,15 @@ export default function Home() {
         <main className="flex-1 border-r-2 pr-6">
           <h1 className="font-bold text-2xl">Lista</h1>
           <hr className="my-4" />
+          <div className="flex gap-3 mb-4">
+            <span className="font-bold text-lg w-full max-w-xs">
+              Nome
+            </span>
+            <span className="font-bold text-lg w-full max-w-xs">
+              Grupo
+            </span>
+          </div>
+          <hr className="my-4" />
           <ul>
           {list.map(({ name, group }, idx) => (
             <li key={name} className="mt-2">
