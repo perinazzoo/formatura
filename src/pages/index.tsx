@@ -28,6 +28,7 @@ export default function Home() {
   const inputRef = React.useRef<HTMLInputElement>(null)
   const groupRef = React.useRef<HTMLSelectElement>(null)
   const [list, setList] = useLocalStorage<ListItem[]>('@formatura/list', [])
+  const [filter, setFilter] = useLocalStorage<string>('')
 
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -67,7 +68,7 @@ export default function Home() {
           </div>
           <hr className="my-4" />
           <ul>
-          {list.map(({ name, group }, idx) => (
+          {list.filter(({ group }) => filter ? group === filter : true).sort((a, b) => options.indexOf(a.group) - options.indexOf(b.group)).map(({ name, group }, idx) => (
             <li key={idx} className="mt-2">
               <div className="flex gap-3">
                 <span className="w-full max-w-xs">
@@ -103,7 +104,20 @@ export default function Home() {
         <aside className="w-full max-w-xs sticky top-4 h-max">
           <h1 className="font-bold text-2xl">Totalizador</h1>
           <hr className="my-4" />
-          <h1>Número de pessoas: {list.length}</h1>
+          <p>Número de pessoas: {list.length}</p>
+          <hr className="my-4" />
+          <div className="flex">
+            <h1 className="font-bold text-2xl">Filtrar</h1>
+            {filter && (
+              <button onClick={() => setFilter('')} className="text-red-500 text-2xl ml-4">x</button>
+            )}
+          </div>
+          <hr className="my-4" />
+          <div className="flex gap-2 flex-wrap">{options.map((opt, idx) => (
+            <div key={idx}>
+              <button onClick={() => setFilter(opt)}  className={filter === opt ? 'text-purple-500' : 'text-black'}>{opt}</button>
+            </div>
+          ))}</div>
         </aside>
       </div>
     </Container>
