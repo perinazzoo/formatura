@@ -57,7 +57,7 @@ export default function Home() {
 
   async function share () {
     try {
-      await navigator.clipboard.writeText(window.location.origin + '?share=' + JSON.stringify(list))
+      await navigator.clipboard.writeText(window.location.origin + '?share=' + encodeURIComponent(JSON.stringify(list)))
       alert('Link copiado com sucesso')
     } catch {
       alert('Falha ao copiar o link')
@@ -66,7 +66,7 @@ export default function Home() {
 
   useEffect(() => {
     if (router.isReady && router.query.share) {
-      const value = typeof router.query.share === 'string' ? router.query.share : router.query.share[0]
+      const value = decodeURIComponent(typeof router.query.share === 'string' ? router.query.share : router.query.share[0])
       if (list.length) {
         confirm('Tem certeza que deseja alterar a sua lista?') && setList(JSON.parse(value))
       } else {
