@@ -1,4 +1,5 @@
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { Container } from "../components/container";
 import { useLocalStorage } from "../hooks/use-local-storage";
 
@@ -25,6 +26,7 @@ const options = [
 ]
 
 export default function Home() {
+  const router = useRouter()
   const inputRef = React.useRef<HTMLInputElement>(null)
   const groupRef = React.useRef<HTMLSelectElement>(null)
   const [list, setList] = useLocalStorage<ListItem[]>('@formatura/list', [])
@@ -51,6 +53,23 @@ export default function Home() {
   function removeItem (index: number) {
     setList(list.filter((_, idx) => idx !== index))
   }
+
+  async function share () {
+    try {
+      await navigator.clipboard.writeText(window.location.origin + '?share=' + JSON.stringify(list))
+      alert('Link copiado com sucesso')
+    } catch {
+      alert('Falha ao copiar o link')
+    }
+  }
+
+  useEffect(() => {
+    if (router.isReady && list.length && router.query.share) {
+      confirm('Tem certeza que deseja alterar a sua lista?') && setList(JSON.parse(typeof router.query.share === 'string' ? router.query.share : router.query.share[0]))
+      router.push('/')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady])
 
   return (
     <Container>
@@ -113,11 +132,15 @@ export default function Home() {
             )}
           </div>
           <hr className="my-4" />
-          <div className="flex gap-2 flex-wrap">{options.map((opt, idx) => (
-            <div key={idx}>
-              <button onClick={() => setFilter(opt)}  className={filter === opt ? 'text-purple-500' : 'text-black'}>{opt}</button>
-            </div>
-          ))}</div>
+          <div className="flex gap-2 flex-wrap">
+            {options.map((opt, idx) => (
+              <div key={idx}>
+                <button onClick={() => setFilter(opt)}  className={filter === opt ? 'text-purple-500' : 'text-black'}>{opt}</button>
+              </div>
+            ))}
+          </div>
+          <hr className="my-4" />
+          <button onClick={share} className="px-6 py-2 rounded-md bg-purple-500 text-white">Compartilhar</button>
         </aside>
       </div>
     </Container>
