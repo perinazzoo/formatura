@@ -64,8 +64,13 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (router.isReady && list.length && router.query.share) {
-      confirm('Tem certeza que deseja alterar a sua lista?') && setList(JSON.parse(typeof router.query.share === 'string' ? router.query.share : router.query.share[0]))
+    if (router.isReady && router.query.share) {
+      const value = JSON.parse(typeof router.query.share === 'string' ? router.query.share : router.query.share[0])
+      if (list.length) {
+        confirm('Tem certeza que deseja alterar a sua lista?') && setList(value)
+      } else {
+        setList(JSON.parse(value))
+      }
       router.push('/')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
