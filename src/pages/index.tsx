@@ -26,6 +26,7 @@ const options = [
 ]
 
 export default function Home() {
+  const inputRef = React.useRef<HTMLInputElement>(null)
   const [list, setList] = useLocalStorage<ListItem[]>('@formatura/list', [])
   const [formState, setFormState] = React.useState<FormState>({
     group: '',
@@ -41,6 +42,12 @@ export default function Home() {
       name: formState.name,
       group: formState.group
     }])
+
+    setFormState({
+      group: '',
+      name: ''
+    })
+    inputRef.current?.focus()
   }
 
   function onChange (name: keyof FormState, value: string) {
@@ -88,7 +95,7 @@ export default function Home() {
           </ul>
           <form onSubmit={submit} className="flex gap-3 mt-4">
             <div className="w-full max-w-xs">
-              <Input onChange={(e) => onChange('name', e.target.value)} label="Nome da pessoa" />
+              <Input ref={inputRef} onChange={(e) => onChange('name', e.target.value)} label="Nome da pessoa" />
             </div>
             <div className="w-full max-w-xs">
               <Select onChange={(val) => onChange('group', val as string)} label="Grupo">
