@@ -53,7 +53,7 @@ export default function Home() {
 
   return (
     <Container>
-      <div className="flex py-6 gap-8">
+      <div className="flex py-6 gap-8 relative">
         <main className="flex-1 border-r-2 pr-6">
           <h1 className="font-bold text-2xl">Lista</h1>
           <hr className="my-4" />
@@ -100,7 +100,7 @@ export default function Home() {
             </button>
           </form>
         </main>
-        <aside className="w-full max-w-xs">
+        <aside className="w-full max-w-xs sticky top-4 h-max">
           <h1 className="font-bold text-2xl">Totalizador</h1>
           <hr className="my-4" />
           <h1>Número de pessoas: {list.length}</h1>
